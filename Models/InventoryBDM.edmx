@@ -1,0 +1,762 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="InventoryBDMModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Area">
+          <Key>
+            <PropertyRef Name="AreaID" />
+          </Key>
+          <Property Name="AreaID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="Floor" Type="int" />
+          <Property Name="DivisionID" Type="int" />
+        </EntityType>
+        <EntityType Name="Brand">
+          <Key>
+            <PropertyRef Name="BrandID" />
+          </Key>
+          <Property Name="BrandID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="250" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BrandSoftware">
+          <Key>
+            <PropertyRef Name="idBrandSoftware" />
+          </Key>
+          <Property Name="idBrandSoftware" Type="int" Nullable="false" />
+          <Property Name="Brand" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Division">
+          <Key>
+            <PropertyRef Name="DivisionID" />
+          </Key>
+          <Property Name="DivisionID" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Order" Type="int" />
+        </EntityType>
+        <EntityType Name="Hardware">
+          <Key>
+            <PropertyRef Name="SerialNumber" />
+          </Key>
+          <Property Name="SerialNumber" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="Model" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="BrandID" Type="int" Nullable="false" />
+          <Property Name="TypeHardwareID" Type="int" Nullable="false" />
+          <Property Name="DivisionID" Type="int" />
+          <Property Name="AreaID" Type="int" />
+          <Property Name="SubAreaID" Type="int" />
+          <Property Name="InvoiceID" Type="nvarchar" MaxLength="300" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="UserNetworkName" Type="nvarchar" MaxLength="300" />
+          <Property Name="NameEquip" Type="nvarchar" MaxLength="300" />
+          <Property Name="CriticEquip" Type="bit" Nullable="false" />
+          <Property Name="SerialAssigned" Type="nvarchar" MaxLength="300" />
+          <Property Name="DateWarranty" Type="date" />
+        </EntityType>
+        <EntityType Name="Invoice">
+          <Key>
+            <PropertyRef Name="PO" />
+          </Key>
+          <Property Name="PO" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="RequestDocument" Type="nvarchar" MaxLength="50" />
+          <Property Name="rutaArchivo" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="idProduct" />
+          </Key>
+          <Property Name="idProduct" Type="int" Nullable="false" />
+          <Property Name="Product" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Responsables">
+          <Key>
+            <PropertyRef Name="username" />
+          </Key>
+          <Property Name="username" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Software">
+          <Key>
+            <PropertyRef Name="SerialNumber" />
+          </Key>
+          <Property Name="SerialNumber" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="idProduct" Type="int" />
+          <Property Name="idBrand" Type="int" />
+          <Property Name="PO" Type="nvarchar" MaxLength="300" />
+          <Property Name="SerialKey" Type="nvarchar" MaxLength="300" />
+        </EntityType>
+        <EntityType Name="SubArea">
+          <Key>
+            <PropertyRef Name="SubAreaID" />
+          </Key>
+          <Property Name="SubAreaID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="300" />
+          <Property Name="AreaID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TypeHardware">
+          <Key>
+            <PropertyRef Name="TypeHardwareID" />
+          </Key>
+          <Property Name="TypeHardwareID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="200" Nullable="false" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="250" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Area_Division">
+          <End Role="Division" Type="Self.Division" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Area" Type="Self.Area" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Division">
+              <PropertyRef Name="DivisionID" />
+            </Principal>
+            <Dependent Role="Area">
+              <PropertyRef Name="DivisionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Hardware_Area">
+          <End Role="Area" Type="Self.Area" Multiplicity="0..1" />
+          <End Role="Hardware" Type="Self.Hardware" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Area">
+              <PropertyRef Name="AreaID" />
+            </Principal>
+            <Dependent Role="Hardware">
+              <PropertyRef Name="AreaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Hardware_Brand">
+          <End Role="Brand" Type="Self.Brand" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Hardware" Type="Self.Hardware" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Brand">
+              <PropertyRef Name="BrandID" />
+            </Principal>
+            <Dependent Role="Hardware">
+              <PropertyRef Name="BrandID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Hardware_Division">
+          <End Role="Division" Type="Self.Division" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Hardware" Type="Self.Hardware" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Division">
+              <PropertyRef Name="DivisionID" />
+            </Principal>
+            <Dependent Role="Hardware">
+              <PropertyRef Name="DivisionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Hardware_Hardware">
+          <End Role="Hardware" Type="Self.Hardware" Multiplicity="0..1" />
+          <End Role="Hardware1" Type="Self.Hardware" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Hardware">
+              <PropertyRef Name="SerialNumber" />
+            </Principal>
+            <Dependent Role="Hardware1">
+              <PropertyRef Name="SerialAssigned" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Hardware_Invoice">
+          <End Role="Invoice" Type="Self.Invoice" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Hardware" Type="Self.Hardware" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Invoice">
+              <PropertyRef Name="PO" />
+            </Principal>
+            <Dependent Role="Hardware">
+              <PropertyRef Name="InvoiceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Hardware_TypeHardware">
+          <End Role="TypeHardware" Type="Self.TypeHardware" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Hardware" Type="Self.Hardware" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TypeHardware">
+              <PropertyRef Name="TypeHardwareID" />
+            </Principal>
+            <Dependent Role="Hardware">
+              <PropertyRef Name="TypeHardwareID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Software_BrandSoftware">
+          <End Role="BrandSoftware" Type="Self.BrandSoftware" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Software" Type="Self.Software" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BrandSoftware">
+              <PropertyRef Name="idBrandSoftware" />
+            </Principal>
+            <Dependent Role="Software">
+              <PropertyRef Name="idBrand" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Software_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Software" Type="Self.Software" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="idProduct" />
+            </Principal>
+            <Dependent Role="Software">
+              <PropertyRef Name="idProduct" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SubArea_Area">
+          <End Role="Area" Type="Self.Area" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="SubArea" Type="Self.SubArea" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Area">
+              <PropertyRef Name="AreaID" />
+            </Principal>
+            <Dependent Role="SubArea">
+              <PropertyRef Name="AreaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="InventoryBDMModelStoreContainer">
+          <EntitySet Name="Area" EntityType="Self.Area" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Brand" EntityType="Self.Brand" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BrandSoftware" EntityType="Self.BrandSoftware" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Division" EntityType="Self.Division" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Hardware" EntityType="Self.Hardware" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Invoice" EntityType="Self.Invoice" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Responsables" EntityType="Self.Responsables" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Software" EntityType="Self.Software" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SubArea" EntityType="Self.SubArea" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TypeHardware" EntityType="Self.TypeHardware" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Area_Division" Association="Self.FK_Area_Division">
+            <End Role="Division" EntitySet="Division" />
+            <End Role="Area" EntitySet="Area" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Hardware_Area" Association="Self.FK_Hardware_Area">
+            <End Role="Area" EntitySet="Area" />
+            <End Role="Hardware" EntitySet="Hardware" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Hardware_Brand" Association="Self.FK_Hardware_Brand">
+            <End Role="Brand" EntitySet="Brand" />
+            <End Role="Hardware" EntitySet="Hardware" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Hardware_Division" Association="Self.FK_Hardware_Division">
+            <End Role="Division" EntitySet="Division" />
+            <End Role="Hardware" EntitySet="Hardware" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Hardware_Hardware" Association="Self.FK_Hardware_Hardware">
+            <End Role="Hardware" EntitySet="Hardware" />
+            <End Role="Hardware1" EntitySet="Hardware" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Hardware_Invoice" Association="Self.FK_Hardware_Invoice">
+            <End Role="Invoice" EntitySet="Invoice" />
+            <End Role="Hardware" EntitySet="Hardware" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Hardware_TypeHardware" Association="Self.FK_Hardware_TypeHardware">
+            <End Role="TypeHardware" EntitySet="TypeHardware" />
+            <End Role="Hardware" EntitySet="Hardware" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Software_BrandSoftware" Association="Self.FK_Software_BrandSoftware">
+            <End Role="BrandSoftware" EntitySet="BrandSoftware" />
+            <End Role="Software" EntitySet="Software" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Software_Product" Association="Self.FK_Software_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="Software" EntitySet="Software" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SubArea_Area" Association="Self.FK_SubArea_Area">
+            <End Role="Area" EntitySet="Area" />
+            <End Role="SubArea" EntitySet="SubArea" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="InventoryBDMModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Area">
+          <Key>
+            <PropertyRef Name="AreaID" />
+          </Key>
+          <Property Name="AreaID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Floor" Type="Int32" />
+          <Property Name="DivisionID" Type="Int32" />
+          <NavigationProperty Name="Division" Relationship="Self.FK_Area_Division" FromRole="Area" ToRole="Division" />
+          <NavigationProperty Name="Hardwares" Relationship="Self.FK_Hardware_Area" FromRole="Area" ToRole="Hardware" />
+          <NavigationProperty Name="SubAreas" Relationship="Self.FK_SubArea_Area" FromRole="Area" ToRole="SubArea" />
+        </EntityType>
+        <EntityType Name="Division">
+          <Key>
+            <PropertyRef Name="DivisionID" />
+          </Key>
+          <Property Name="DivisionID" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Order" Type="Int32" />
+          <NavigationProperty Name="Areas" Relationship="Self.FK_Area_Division" FromRole="Division" ToRole="Area" />
+          <NavigationProperty Name="Hardwares" Relationship="Self.FK_Hardware_Division" FromRole="Division" ToRole="Hardware" />
+        </EntityType>
+        <EntityType Name="Hardware">
+          <Key>
+            <PropertyRef Name="SerialNumber" />
+          </Key>
+          <Property Name="SerialNumber" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Model" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="BrandID" Type="Int32" Nullable="false" />
+          <Property Name="TypeHardwareID" Type="Int32" Nullable="false" />
+          <Property Name="DivisionID" Type="Int32" />
+          <Property Name="AreaID" Type="Int32" />
+          <Property Name="SubAreaID" Type="Int32" />
+          <Property Name="InvoiceID" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="UserName" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="UserNetworkName" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="NameEquip" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="CriticEquip" Type="Boolean" Nullable="false" />
+          <Property Name="SerialAssigned" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="DateWarranty" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Area" Relationship="Self.FK_Hardware_Area" FromRole="Hardware" ToRole="Area" />
+          <NavigationProperty Name="Division" Relationship="Self.FK_Hardware_Division" FromRole="Hardware" ToRole="Division" />
+          <NavigationProperty Name="Hardware1" Relationship="Self.FK_Hardware_Hardware" FromRole="Hardware" ToRole="Hardware1" />
+          <NavigationProperty Name="Hardware2" Relationship="Self.FK_Hardware_Hardware" FromRole="Hardware1" ToRole="Hardware" />
+          <NavigationProperty Name="Invoice" Relationship="Self.FK_Hardware_Invoice" FromRole="Hardware" ToRole="Invoice" />
+          <NavigationProperty Name="TypeHardware" Relationship="Self.FK_Hardware_TypeHardware" FromRole="Hardware" ToRole="TypeHardware" />
+          <NavigationProperty Name="Brand" Relationship="InventoryBDMModel.FK_Hardware_Brand" FromRole="Hardware" ToRole="Brand" />
+        </EntityType>
+        <EntityType Name="Invoice">
+          <Key>
+            <PropertyRef Name="PO" />
+          </Key>
+          <Property Name="PO" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="RequestDocument" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="rutaArchivo" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Hardwares" Relationship="Self.FK_Hardware_Invoice" FromRole="Invoice" ToRole="Hardware" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="idProduct" />
+          </Key>
+          <Property Name="idProduct" Type="Int32" Nullable="false" />
+          <Property Name="Product1" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Softwares" Relationship="Self.FK_Software_Product" FromRole="Product" ToRole="Software" />
+        </EntityType>
+        <EntityType Name="Responsable">
+          <Key>
+            <PropertyRef Name="username" />
+          </Key>
+          <Property Name="username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Software">
+          <Key>
+            <PropertyRef Name="SerialNumber" />
+          </Key>
+          <Property Name="SerialNumber" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="idProduct" Type="Int32" />
+          <Property Name="idBrand" Type="Int32" />
+          <Property Name="PO" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="SerialKey" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Product" Relationship="Self.FK_Software_Product" FromRole="Software" ToRole="Product" />
+          <NavigationProperty Name="BrandSoftware" Relationship="InventoryBDMModel.FK_Software_BrandSoftware" FromRole="Software" ToRole="BrandSoftware" />
+        </EntityType>
+        <EntityType Name="SubArea">
+          <Key>
+            <PropertyRef Name="SubAreaID" />
+          </Key>
+          <Property Name="SubAreaID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="AreaID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Area" Relationship="Self.FK_SubArea_Area" FromRole="SubArea" ToRole="Area" />
+        </EntityType>
+        <EntityType Name="TypeHardware">
+          <Key>
+            <PropertyRef Name="TypeHardwareID" />
+          </Key>
+          <Property Name="TypeHardwareID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Hardwares" Relationship="Self.FK_Hardware_TypeHardware" FromRole="TypeHardware" ToRole="Hardware" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Area_Division">
+          <End Role="Division" Type="Self.Division" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Area" Type="Self.Area" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Division">
+              <PropertyRef Name="DivisionID" />
+            </Principal>
+            <Dependent Role="Area">
+              <PropertyRef Name="DivisionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Hardware_Area">
+          <End Role="Area" Type="Self.Area" Multiplicity="0..1" />
+          <End Role="Hardware" Type="Self.Hardware" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Area">
+              <PropertyRef Name="AreaID" />
+            </Principal>
+            <Dependent Role="Hardware">
+              <PropertyRef Name="AreaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SubArea_Area">
+          <End Role="Area" Type="Self.Area" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="SubArea" Type="Self.SubArea" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Area">
+              <PropertyRef Name="AreaID" />
+            </Principal>
+            <Dependent Role="SubArea">
+              <PropertyRef Name="AreaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Hardware_Division">
+          <End Role="Division" Type="Self.Division" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Hardware" Type="Self.Hardware" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Division">
+              <PropertyRef Name="DivisionID" />
+            </Principal>
+            <Dependent Role="Hardware">
+              <PropertyRef Name="DivisionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Hardware_Hardware">
+          <End Role="Hardware" Type="Self.Hardware" Multiplicity="0..1" />
+          <End Role="Hardware1" Type="Self.Hardware" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Hardware">
+              <PropertyRef Name="SerialNumber" />
+            </Principal>
+            <Dependent Role="Hardware1">
+              <PropertyRef Name="SerialAssigned" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Hardware_Invoice">
+          <End Role="Invoice" Type="Self.Invoice" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Hardware" Type="Self.Hardware" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Invoice">
+              <PropertyRef Name="PO" />
+            </Principal>
+            <Dependent Role="Hardware">
+              <PropertyRef Name="InvoiceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Hardware_TypeHardware">
+          <End Role="TypeHardware" Type="Self.TypeHardware" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Hardware" Type="Self.Hardware" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TypeHardware">
+              <PropertyRef Name="TypeHardwareID" />
+            </Principal>
+            <Dependent Role="Hardware">
+              <PropertyRef Name="TypeHardwareID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Software_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Software" Type="Self.Software" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="idProduct" />
+            </Principal>
+            <Dependent Role="Software">
+              <PropertyRef Name="idProduct" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="InventoryBDMEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Areas" EntityType="Self.Area" />
+          <EntitySet Name="Divisions" EntityType="Self.Division" />
+          <EntitySet Name="Hardwares" EntityType="Self.Hardware" />
+          <EntitySet Name="Invoices" EntityType="Self.Invoice" />
+          <EntitySet Name="Products" EntityType="Self.Product" />
+          <EntitySet Name="Responsables" EntityType="Self.Responsable" />
+          <EntitySet Name="Softwares" EntityType="Self.Software" />
+          <EntitySet Name="SubAreas" EntityType="Self.SubArea" />
+          <EntitySet Name="TypeHardwares" EntityType="Self.TypeHardware" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <AssociationSet Name="FK_Area_Division" Association="Self.FK_Area_Division">
+            <End Role="Division" EntitySet="Divisions" />
+            <End Role="Area" EntitySet="Areas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Hardware_Area" Association="Self.FK_Hardware_Area">
+            <End Role="Area" EntitySet="Areas" />
+            <End Role="Hardware" EntitySet="Hardwares" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SubArea_Area" Association="Self.FK_SubArea_Area">
+            <End Role="Area" EntitySet="Areas" />
+            <End Role="SubArea" EntitySet="SubAreas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Hardware_Division" Association="Self.FK_Hardware_Division">
+            <End Role="Division" EntitySet="Divisions" />
+            <End Role="Hardware" EntitySet="Hardwares" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Hardware_Hardware" Association="Self.FK_Hardware_Hardware">
+            <End Role="Hardware" EntitySet="Hardwares" />
+            <End Role="Hardware1" EntitySet="Hardwares" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Hardware_Invoice" Association="Self.FK_Hardware_Invoice">
+            <End Role="Invoice" EntitySet="Invoices" />
+            <End Role="Hardware" EntitySet="Hardwares" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Hardware_TypeHardware" Association="Self.FK_Hardware_TypeHardware">
+            <End Role="TypeHardware" EntitySet="TypeHardwares" />
+            <End Role="Hardware" EntitySet="Hardwares" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Software_Product" Association="Self.FK_Software_Product">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="Software" EntitySet="Softwares" />
+          </AssociationSet>
+          <EntitySet Name="BrandSoftwares" EntityType="InventoryBDMModel.BrandSoftware" />
+          <AssociationSet Name="FK_Software_BrandSoftware" Association="InventoryBDMModel.FK_Software_BrandSoftware">
+            <End Role="BrandSoftware" EntitySet="BrandSoftwares" />
+            <End Role="Software" EntitySet="Softwares" />
+          </AssociationSet>
+          <EntitySet Name="Brands" EntityType="InventoryBDMModel.Brand" />
+          <AssociationSet Name="FK_Hardware_Brand" Association="InventoryBDMModel.FK_Hardware_Brand">
+            <End Role="Brand" EntitySet="Brands" />
+            <End Role="Hardware" EntitySet="Hardwares" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="BrandSoftware">
+          <Key>
+            <PropertyRef Name="idBrandSoftware" />
+          </Key>
+          <Property Name="idBrandSoftware" Type="Int32" Nullable="false" />
+          <Property Name="Brand" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Softwares" Relationship="InventoryBDMModel.FK_Software_BrandSoftware" FromRole="BrandSoftware" ToRole="Software" />
+        </EntityType>
+        <Association Name="FK_Software_BrandSoftware">
+          <End Type="InventoryBDMModel.BrandSoftware" Role="BrandSoftware" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="InventoryBDMModel.Software" Role="Software" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BrandSoftware">
+              <PropertyRef Name="idBrandSoftware" />
+            </Principal>
+            <Dependent Role="Software">
+              <PropertyRef Name="idBrand" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Brand">
+          <Key>
+            <PropertyRef Name="BrandID" />
+          </Key>
+          <Property Name="BrandID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Hardwares" Relationship="InventoryBDMModel.FK_Hardware_Brand" FromRole="Brand" ToRole="Hardware" />
+        </EntityType>
+        <Association Name="FK_Hardware_Brand">
+          <End Type="InventoryBDMModel.Brand" Role="Brand" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="InventoryBDMModel.Hardware" Role="Hardware" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Brand">
+              <PropertyRef Name="BrandID" />
+            </Principal>
+            <Dependent Role="Hardware">
+              <PropertyRef Name="BrandID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="InventoryBDMModelStoreContainer" CdmEntityContainer="InventoryBDMEntities">
+          <EntitySetMapping Name="Areas">
+            <EntityTypeMapping TypeName="InventoryBDMModel.Area">
+              <MappingFragment StoreEntitySet="Area">
+                <ScalarProperty Name="AreaID" ColumnName="AreaID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Floor" ColumnName="Floor" />
+                <ScalarProperty Name="DivisionID" ColumnName="DivisionID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Divisions">
+            <EntityTypeMapping TypeName="InventoryBDMModel.Division">
+              <MappingFragment StoreEntitySet="Division">
+                <ScalarProperty Name="DivisionID" ColumnName="DivisionID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Order" ColumnName="Order" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Hardwares">
+            <EntityTypeMapping TypeName="InventoryBDMModel.Hardware">
+              <MappingFragment StoreEntitySet="Hardware">
+                <ScalarProperty Name="SerialNumber" ColumnName="SerialNumber" />
+                <ScalarProperty Name="Model" ColumnName="Model" />
+                <ScalarProperty Name="BrandID" ColumnName="BrandID" />
+                <ScalarProperty Name="TypeHardwareID" ColumnName="TypeHardwareID" />
+                <ScalarProperty Name="DivisionID" ColumnName="DivisionID" />
+                <ScalarProperty Name="AreaID" ColumnName="AreaID" />
+                <ScalarProperty Name="SubAreaID" ColumnName="SubAreaID" />
+                <ScalarProperty Name="InvoiceID" ColumnName="InvoiceID" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="UserNetworkName" ColumnName="UserNetworkName" />
+                <ScalarProperty Name="NameEquip" ColumnName="NameEquip" />
+                <ScalarProperty Name="CriticEquip" ColumnName="CriticEquip" />
+                <ScalarProperty Name="SerialAssigned" ColumnName="SerialAssigned" />
+                <ScalarProperty Name="DateWarranty" ColumnName="DateWarranty" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Invoices">
+            <EntityTypeMapping TypeName="InventoryBDMModel.Invoice">
+              <MappingFragment StoreEntitySet="Invoice">
+                <ScalarProperty Name="PO" ColumnName="PO" />
+                <ScalarProperty Name="RequestDocument" ColumnName="RequestDocument" />
+                <ScalarProperty Name="rutaArchivo" ColumnName="rutaArchivo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="InventoryBDMModel.Product">
+              <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="idProduct" ColumnName="idProduct" />
+                <ScalarProperty Name="Product1" ColumnName="Product" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Responsables">
+            <EntityTypeMapping TypeName="InventoryBDMModel.Responsable">
+              <MappingFragment StoreEntitySet="Responsables">
+                <ScalarProperty Name="username" ColumnName="username" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Softwares">
+            <EntityTypeMapping TypeName="InventoryBDMModel.Software">
+              <MappingFragment StoreEntitySet="Software">
+                <ScalarProperty Name="SerialNumber" ColumnName="SerialNumber" />
+                <ScalarProperty Name="idProduct" ColumnName="idProduct" />
+                <ScalarProperty Name="idBrand" ColumnName="idBrand" />
+                <ScalarProperty Name="PO" ColumnName="PO" />
+                <ScalarProperty Name="SerialKey" ColumnName="SerialKey" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SubAreas">
+            <EntityTypeMapping TypeName="InventoryBDMModel.SubArea">
+              <MappingFragment StoreEntitySet="SubArea">
+                <ScalarProperty Name="SubAreaID" ColumnName="SubAreaID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="AreaID" ColumnName="AreaID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TypeHardwares">
+            <EntityTypeMapping TypeName="InventoryBDMModel.TypeHardware">
+              <MappingFragment StoreEntitySet="TypeHardware">
+                <ScalarProperty Name="TypeHardwareID" ColumnName="TypeHardwareID" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="InventoryBDMModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BrandSoftwares">
+            <EntityTypeMapping TypeName="InventoryBDMModel.BrandSoftware">
+              <MappingFragment StoreEntitySet="BrandSoftware">
+                <ScalarProperty Name="Brand" ColumnName="Brand" />
+                <ScalarProperty Name="idBrandSoftware" ColumnName="idBrandSoftware" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Brands">
+            <EntityTypeMapping TypeName="InventoryBDMModel.Brand">
+              <MappingFragment StoreEntitySet="Brand">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="BrandID" ColumnName="BrandID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

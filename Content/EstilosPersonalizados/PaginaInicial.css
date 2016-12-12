@@ -1,0 +1,33 @@
+﻿.wrapper {	
+  margin-top: 100px;
+  
+}
+
+.form-signin {
+    max-width: 50%;
+    padding: 15px 35px 45px;
+    margin: 0 auto;
+    background-color: #fff;
+    border: 2px solid rgba(20, 20, 225, 0.10);
+}
+.form-signin-heading
+    {
+	  margin-bottom: 30px;
+      text-align:center;
+      font-size:40px;
+	}
+
+	
+#68abe2
+
+	.logintext {
+	  margin-bottom: -1px;
+	  border-bottom-left-radius: 0;
+	  border-bottom-right-radius: 0;
+	}
+
+	.loginpassw {
+	  margin-bottom: 20px;
+	  border-top-left-radius: 0;
+	  border-top-right-radius: 0;
+	}
